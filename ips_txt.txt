@@ -1,0 +1,8 @@
+8.8.8.8          # Google Public DNS
+1.1.1.1          # Cloudflare DNS
+9.9.9.9          # Quad9 DNS
+208.67.222.222   # OpenDNS
+4.2.2.2          # Level3 DNS
+192.0.2.1        # TEST-NET-1 (RFC 5737, reserved for docs/testing)
+198.51.100.1     # TEST-NET-2
+203.0.113.1      # TEST-NET-3
