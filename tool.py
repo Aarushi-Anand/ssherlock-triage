@@ -17,14 +17,19 @@ LOGIN_PATTERN = re.compile(r'(Failed|Accepted) password for (?:invalid user )?(\
 def main():
     parser = argparse.ArgumentParser(description="threat intelligence IP checker")
     parser.add_argument("--bulk",help="path to a text file")
-    parser.add_argument("--log", help=" path to a ssh log file")
+    parser.add_argument("--log", help="path to a ssh log file")
 
     args=parser.parse_args()
 
     if args.log:
-        counts=count_failed_logins(args.log)
-        for ip,n in sorted(counts.items(),key=lambda x:x[1], reverse=True):
-            print(f"{ip}: {n} failed logins")
+        data=analyse_logs(args.log)
+        top = sorted(data.items(), key=lambda x:x[1]["failures"], reverse=True)[:5]
+        for ip, info in top:
+            vt,ad =check_ip(ip)
+            result=score_ip(info,vt,ad)
+            print (f"\n{ip} -> {result['verdict']} (score {result['score']})")
+            for r in result["reasons"]:
+                print(f"    - {r}")
         return
         
     if args.bulk:
@@ -106,8 +111,8 @@ def check_ip(ip):
     print(f"\n --- checking {ip} ---")
     vt= check_virustotal(ip)
     ad=check_abuseipdb(ip)
-    print(f"VirusTotal: {vt['malicious']} malicious" if vt else "VirusTotal: error")
-    print(f"AbuseIPdb: {ad['reports']} reports, score {ad['score']}%" if ad else "AbuseIPdb: error")
+    # print(f"VirusTotal: {vt['malicious']} malicious" if vt else "VirusTotal: error")
+    # print(f"AbuseIPdb: {ad['reports']} reports, score {ad['score']}%" if ad else "AbuseIPdb: error")
     return vt,ad
 
 def count_failed_logins(filename):
@@ -178,7 +183,7 @@ def score_ip(results,vt,ad):
         score+=20
         reasons.append(f"{results['failures']} failed logins")
         if results["success"]:
-            score+=20
+            score+=30
             reasons.append("Login succeeded after failures")
             
     score=min(score,100)
