@@ -62,8 +62,7 @@ No mystery number. Every verdict comes with the evidence behind it, so an analys
 ## Run it yourself
 
 ```bash
-git clone <this-repo>
-cd threat-intel-tool
+git clone https://github.com/Aarushi-Anand/ssherlock-triage
 pip install -r requirements.txt
 ```
 
