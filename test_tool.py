@@ -1,4 +1,5 @@
-from tool import score_ip,analyse_logs
+from scoring import score_ip
+from parsers import analyse_logs
 
 def test_score_ip_malicious():
     log={"failures": 47,"success":True,"users_tried":{"root"}}
