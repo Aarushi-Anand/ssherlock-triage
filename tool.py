@@ -143,6 +143,8 @@ def analyse_logs(filename):
 
                 if not is_valid_ip(ip):
                     continue
+                if ipaddress.ip_address(ip).is_private:
+                    continue
 
                 if ip not in results:
                     results[ip]={"failures":0,"success": False,"users_tried": set()}
@@ -152,7 +154,7 @@ def analyse_logs(filename):
                     results[ip]["failures"]+=1
                     # add user to this ip's users_tried
                     results[ip]["users_tried"].add(user)
-                    
+
                 else:
                     # if this IP's failures > 0, set success to true
                     if results[ip]["failures"] > 0:
