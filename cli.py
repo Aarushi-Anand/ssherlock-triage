@@ -2,6 +2,7 @@ import argparse
 from parsers import read_ips, analyse_logs
 from intel import check_ip
 from scoring import score_ip
+from cache import init_db
 
 def main():
     parser = argparse.ArgumentParser(description="threat intelligence IP checker")
@@ -13,8 +14,9 @@ def main():
     if args.log:
         data=analyse_logs(args.log)
         top = sorted(data.items(), key=lambda x:x[1]["failures"], reverse=True)[:5]
+        conn=init_db()
         for ip, info in top:
-            vt,ad =check_ip(ip)
+            vt,ad =check_ip(ip,conn)
             result=score_ip(info,vt,ad)
             print (f"\n{ip} -> {result['verdict']} (score {result['score']})")
             for r in result["reasons"]:

@@ -1,6 +1,7 @@
 import requests
 import os
 import time
+from cache import init_db, get_cached, save_cache
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -40,10 +41,13 @@ def check_abuseipdb(ip):
         return {"score": score, "reports": reports}
     return None
 
-def check_ip(ip):
-    # print(f"\n --- checking {ip} ---")
+def check_ip(ip,conn):
+    cached=get_cached(conn, ip)
+    if cached:
+        return cached["vt"],cached["ad"]
     vt= check_virustotal(ip)
     ad=check_abuseipdb(ip)
-    # print(f"VirusTotal: {vt['malicious']} malicious" if vt else "VirusTotal: error")
-    # print(f"AbuseIPdb: {ad['reports']} reports, score {ad['score']}%" if ad else "AbuseIPdb: error")
+
+    if vt or ad:
+        save_cache(conn,ip,{"vt":vt,"ad":ad})
     return vt,ad

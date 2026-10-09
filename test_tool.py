@@ -19,4 +19,4 @@ def test_analyse_logs():
 def test_private_ip_skipped():
     result=analyse_logs("test.log")
     assert "192.168.1.5" not in result
-    assert result["202.0.113.45"]["success"] is True
+    assert result["200.51.100.7"]["success"] is True
