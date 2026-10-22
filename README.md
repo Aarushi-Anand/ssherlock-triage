@@ -1,4 +1,5 @@
 # SSHerlock (aka the threat-intel-tool)
+![CI](https://github.com/Aarushi-Anand/ssherlock-triage/actions/workflows/ci.yml/badge.svg)
 ssherlock-triage: SSH log triage with explained verdicts
 
 > *Somebody tried the root password 6 times. The 7th one worked. Was that a clumsy admin, or the worst night of your quarter?*
